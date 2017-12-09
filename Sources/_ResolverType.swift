@@ -6,6 +6,8 @@
 //  Copyright © 2016 Swinject Contributors. All rights reserved.
 //
 
+//swiftlint:disable identifier_name
+
 /// This protocol is designed for the use to extend Swinject functionality.
 /// Do NOT use this protocol unless you intend to write an extension or plugin to Swinject framework.
 ///
