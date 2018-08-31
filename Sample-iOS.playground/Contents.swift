@@ -149,7 +149,7 @@ print(propertyInjection2.play())
 // Method injection 1 (in the component factory)
 container.register(PersonType.self, name: "method1") { r in
     let person = InjectablePerson()
-    person.setPet(r.resolve(AnimalType.self)!)
+    person.setPet(pet: r.resolve(AnimalType.self)!)
     return person
 }
 
@@ -160,7 +160,7 @@ print(methodInjection1.play())
 container.register(PersonType.self, name: "method2") { _ in InjectablePerson() }
     .initCompleted { r, p in
         let injectablePerson = p as! InjectablePerson
-        injectablePerson.setPet(r.resolve(AnimalType.self)!)
+        injectablePerson.setPet(pet: r.resolve(AnimalType.self)!)
     }
 
 let methodInjection2 = container.resolve(PersonType.self, name:"method2")!
@@ -231,12 +231,12 @@ container.register(AnimalType.self) { _, name, running in Horse(name: name, runn
 // If you pass an argument, pass it to `argument` parameter.
 // If you pass more arguments, pass them as a tuple to `arguments` parameter.
 let horse1 = container.resolve(AnimalType.self, argument: "Spirit") as! Horse
-print(horse1.name)
-print(horse1.running)
+debugPrint(horse1.name)
+debugPrint(horse1.running)
 
 let horse2 = container.resolve(AnimalType.self, arguments: "Lucky", true) as! Horse
-print(horse2.name)
-print(horse2.running)
+debugPrint(horse2.name)
+debugPrint(horse2.running)
 
 /*:
 ## Self-binding
@@ -313,7 +313,7 @@ class C { }
 // New instatnces are created every time.
 let container1 = Container()
 container1.register(C.self) { _ in C() }
-    .inObjectScope(.None)
+    .inObjectScope(.none)
 
 let c1 = container1.resolve(C.self)
 let c2 = container1.resolve(C.self)
@@ -331,7 +331,7 @@ print(a1.b.c !== a1.c)
 // New instances are created like ObjectScope.None.
 let container2 = Container()
 container2.register(C.self) { _ in C() }
-    .inObjectScope(.Graph) // This is the default scope.
+    .inObjectScope(.graph) // This is the default scope.
 
 let c3 = container2.resolve(C.self)
 let c4 = container2.resolve(C.self)
@@ -349,7 +349,7 @@ print(a2.b.c === a2.c)
 // The same instance is shared in the container.
 let container3 = Container()
 container3.register(C.self) { _ in C() }
-    .inObjectScope(.Container)
+    .inObjectScope(.container)
 
 let c5 = container3.resolve(C.self)
 let c6 = container3.resolve(C.self)
@@ -365,7 +365,7 @@ print(c5 !== c7)
 // The same instance is shared in the container like ObjectScope.Container.
 let container4 = Container()
 container4.register(C.self) { _ in C() }
-    .inObjectScope(.Hierarchy)
+    .inObjectScope(.hierarchy)
 
 let c8 = container4.resolve(C.self)
 let c9 = container4.resolve(C.self)
@@ -396,7 +396,7 @@ struct Turtle: AnimalType {
 // The object scope is ignored because a value type always creates a new instance.
 let container5 = Container()
 container5.register(AnimalType.self) { _ in Turtle(name: "Reo") }
-    .inObjectScope(.Container)
+    .inObjectScope(.container)
 
 var turtle1 = container5.resolve(AnimalType.self)!
 var turtle2 = container5.resolve(AnimalType.self)!

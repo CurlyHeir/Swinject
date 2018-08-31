@@ -8,6 +8,7 @@
 
 import Foundation
 
+//swiftlint:disable identifier_name
 
 /// The `Container` class represents a dependency injection container, which stores registrations of services
 /// and retrieves registered services with dependencies injected.
@@ -68,7 +69,7 @@ public final class Container {
     public func register<Service>(
         _ serviceType: Service.Type,
         name: String? = nil,
-        factory: (ResolverType) -> Service) -> ServiceEntry<Service>
+        factory: @escaping (ResolverType) -> Service) -> ServiceEntry<Service>
     {
         return _register(serviceType, factory: factory, name: name)
     }
@@ -157,8 +158,6 @@ extension Container: ResolverType {
         return resolve(serviceType, name: nil)
     }
     
-    
-    
     /// Retrieves the instance with the specified service type and registration name.
     ///
     /// - Parameters:
@@ -201,7 +200,7 @@ extension Container: ResolverType {
             resolutionPool[key] = resolvedInstance as Any
         }
         
-        if let completed = entry.initCompleted as? (ResolverType, Service) -> () {
+        if let completed = entry.initCompleted as? (ResolverType, Service) -> Void {
             resolutionPool.appendPendingCompletion({completed(self, resolvedInstance)})
         }
         return resolvedInstance
